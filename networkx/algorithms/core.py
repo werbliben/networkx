@@ -477,6 +477,9 @@ def k_crust(G, k=None, core_number=None):
     return G.subgraph(nodes).copy()
 
 
+find_cores = core_number
+
+
 def k_corona(G, k, core_number=None):
     """Returns the k-corona of G.
 
