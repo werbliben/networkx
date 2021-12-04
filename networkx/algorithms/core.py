@@ -212,8 +212,8 @@ def d_core_number(G):
 
     Parameters
     ----------
-    G : NetworkX graph
-       A graph or directed graph
+    G : NetworkX DiGraph
+       A directed graph
 
     Returns
     -------
@@ -239,10 +239,17 @@ def d_core_number(G):
        Vladimir Batagelj and Matjaz Zaversnik, 2003.
        https://arxiv.org/abs/cs.DS/0310049
     """
-    if nx.number_of_selfloops(G) > 0 or nx.is_directed(G) == False:
+    if nx.number_of_selfloops(G) > 0:
         msg = (
             "Input graph has self loops which is not permitted; "
             "Consider using G.remove_edges_from(nx.selfloop_edges(G))."
+        )
+        raise NetworkXError(msg)
+    
+    if nx.is_directed(G) == False:
+        msg = (
+            "Input graph is not directed; "
+            "Consider converting to DiGraph."
         )
         raise NetworkXError(msg)
 
@@ -258,7 +265,7 @@ def d_core_number(G):
     node_pos = {v: pos for pos, v in enumerate(nodes)}
     # The initial guess for the core number of a node is its degree.
     core = out_degrees
-    nbrs = {v: list(nx.all_neighbors(G, v)) for v in G}
+    nbrs = {v: list(nx.DiGraph.neighbors(G, v)) for v in G}
     for v in nodes:
         for u in nbrs[v]:
             if core[u] > core[v]:
