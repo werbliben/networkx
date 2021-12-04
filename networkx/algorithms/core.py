@@ -269,7 +269,10 @@ def d_core_number(G):
     for v in nodes:
         for u in nbrs[v]:
             if core[u] > core[v]:
-                nbrs[u].remove(v)
+                try:  # Diagnose this more thoroughly
+                    nbrs[u].remove(v)
+                except ValueError as e:
+                    print(e)
                 pos = node_pos[u]
                 bin_start = bin_boundaries[core[u]]
                 node_pos[u] = bin_start
